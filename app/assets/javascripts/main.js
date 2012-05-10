@@ -1,6 +1,6 @@
+var db = "http://lcarsos.net/highscores";
 var guessesLeft = 10;
 var answer = getRandomInt(1,100);
-var highScores = new Array([9, "HarryJamesPotter"], [3, "ZedCthulhu"], [2, "NearlyDied"]);
 
 $('document').ready(function() {
     $('#btnGuess').click(function() {
@@ -36,11 +36,11 @@ $('document').ready(function() {
 // Initialize the game
 $(function() {
     updateScore(guessesLeft);
-    populateHighScores(highScores);
+    populateHighScores();
 });
-
-/*
- * Evaluates the guess made (or lack thereof)
+	
+	/*
+	 * Evaluates the guess made (or lack thereof)
  * Gives the user hints about if they guessed higher or lower than the number
  * Tells user if they have made an invalid guess
  * And ends the game if the player runs out of turns
@@ -81,26 +81,30 @@ function showPrompt(prompt) {
     $('#prompt').slideDown();
 }
 
-function populateHighScores(scores) {
-    for (var i = 0; i < scores.length; ++i) {
-        $('div#highScores').append("<p>" + scores[i][0] + " " + scores[i][1] + "</p>");
-    }
+function populateHighScores() {
+  $('div#highScores').text("");
+	$.get(db, function(scores) {
+    scores.sort(compareNumbers);
+		for (var i = 0; i < scores.length; ++i) {
+			$('div#highScores').append("<p>" + scores[i].name + " " + scores[i].score + "</p>");
+		}
+	});
 }
 
 function showHighScores() {
-    $('div#highScores').text("");
-    populateHighScores(highScores);
+    populateHighScores();
 }
 
 function updateScore(score) {
-    $('h2#score span#guessesLeft').text(score);
+	$('h2#score span#guessesLeft').text(score);
 }
 
 function addScore(score, name) {
-    highScores.push([parseInt(score), name]);
-    highScores.sort(compareNumbers);
-    highScores.reverse();
-    showHighScores();
+	$.post(db, { "name": name, "score": parseInt(score)} );
+	//highScores.push([parseInt(score), name]);
+	//highScores.sort(compareNumbers);
+	//highScores.reverse();
+	showHighScores();
 }
 
 function getRandomInt(min, max) {
@@ -112,10 +116,11 @@ function playAgain() {
     guessesLeft = 10;
     updateScore(guessesLeft);
     $('#guess').val("");
+	$('#name').val("");
     $('#prompt').slideUp();
     $('#guesser').slideDown();
 }
 
 function compareNumbers(a, b) {
-    return a[0] - b[0];
+    return b.score - a.score;
 }

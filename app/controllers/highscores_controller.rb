@@ -1,13 +1,15 @@
 class HighscoresController < ApplicationController
+  respond_to :json
   # GET /highscores
   # GET /highscores.json
   def index
     @highscores = Highscore.all
+    respond_with @highscores
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @highscores }
-    end
+#    respond_to do |format|
+#      format.html # index.html.erb
+#      format.json { respond_with @highscores }
+#    end
   end
 
   # GET /highscores/1
@@ -40,17 +42,20 @@ class HighscoresController < ApplicationController
   # POST /highscores
   # POST /highscores.json
   def create
-    @highscore = Highscore.new(params[:highscore])
-
-    respond_to do |format|
-      if @highscore.save
-        format.html { redirect_to @highscore, notice: 'Highscore was successfully created.' }
-        format.json { render json: @highscore, status: :created, location: @highscore }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @highscore.errors, status: :unprocessable_entity }
-      end
+    @highscore = Highscore.new(name: params[:name], score: params[:score])
+    if @highscore.save
+      format.json { render json: @highscore, status: :created, location: @score }
     end
+
+#    respond_to do |format|
+#      if @highscore.save
+#        format.html { redirect_to @highscore, notice: 'Highscore was successfully created.' }
+#        format.json { render json: @highscore, status: :created, location: @highscore }
+#      else
+#        format.html { render action: "new" }
+#        format.json { render json: @highscore.errors, status: :unprocessable_entity }
+#      end
+#    end
   end
 
   # PUT /highscores/1
