@@ -1,0 +1,23 @@
+%h1 Listing highscores
+
+%table
+  %tr
+    %th Name
+    %th Score
+    %th
+    %th
+    %th
+
+  - @highscores.each do |highscore|
+    %tr
+      %td= highscore.name
+      %td= highscore.score
+      %td= link_to 'Show', highscore
+      %td= link_to 'Edit', edit_highscore_path(highscore)
+      %td= link_to 'Destroy', highscore, :confirm => 'Are you sure?', :method => :delete
+%ol
+  = render Highscore.all
+
+%br
+
+= link_to 'New Highscore', new_highscore_path

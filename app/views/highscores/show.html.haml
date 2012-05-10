@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @highscore.name
+%p
+  %b Score:
+  = @highscore.score
+
+= link_to 'Edit', edit_highscore_path(@highscore)
+\|
+= link_to 'Back', highscores_path

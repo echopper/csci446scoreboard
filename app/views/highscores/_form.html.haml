@@ -1,0 +1,16 @@
+= form_for @highscore do |f|
+  -if @highscore.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@highscore.errors.count, "error")} prohibited this highscore from being saved:"
+      %ul
+        - @highscore.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :score
+    = f.number_field :score
+  .actions
+    = f.submit 'Save'
