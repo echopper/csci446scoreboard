@@ -1,4 +1,4 @@
-var db = "http://lcarsos.net/highscores";
+var db = "http://glowing-frost-1192.herokuapp.com/highscores";
 var guessesLeft = 10;
 var answer = getRandomInt(1,100);
 
